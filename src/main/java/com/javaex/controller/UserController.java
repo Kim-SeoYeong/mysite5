@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.javaex.dao.UserDao;
+import com.javaex.service.UserService;
 import com.javaex.vo.UserVo;
 
 @Controller
@@ -17,9 +18,12 @@ import com.javaex.vo.UserVo;
 public class UserController {
 	
 	//필드
+	//service로 전달하기 때문에 주석처리해줌. 필요가없다
+	//@Autowired
+	//private UserDao userDao;
 	
 	@Autowired
-	private UserDao userDao;
+	private UserService userService;
 	
 	//생성자(디폴트 생성자라 생략되어있음)
 	//g/s 생략
@@ -40,7 +44,7 @@ public class UserController {
 		System.out.println("/user/join");
 		System.out.println(userVo.toString());
 		
-		int count = userDao.insert(userVo);
+		int count = userService.join(userVo);
 
 		return "/user/joinOk";
 	}
@@ -59,7 +63,8 @@ public class UserController {
 		System.out.println("/user/login");
 		System.out.println(userVo.toString());
 		
-		UserVo authUser = userDao.selectUser(userVo);
+		//UserVo authUser = userDao.selectUser(userVo);
+		UserVo authUser = userService.login(userVo);
 		
 		//로그인 성공했을때
 		if(authUser != null) {
@@ -98,7 +103,8 @@ public class UserController {
 		//authVo에서 getNo로 no값을 가져와 int no에 넣어준다. (로그인한 사람의 데이터를 가져오기 위해)
 		int no = authVo.getNo();
 		
-		UserVo userVo = userDao.selectOne(no);
+		//UserVo userVo = userDao.selectOne(no);
+		UserVo userVo = userService.modifyForm(no);
 		//System.out.println("user controller : " + userVo.toString());
 		
 		//가져온 userVo를 model에 담아 넘겨줌
@@ -114,13 +120,16 @@ public class UserController {
 		System.out.println("/user/modify");
 		
 		//System.out.println("세션no 넣기전 : " + userVo.toString());
-		
+		//세션에서 사용자 정보 가져오기
 		UserVo authVo = (UserVo)session.getAttribute("authUser");
 		//userVo no에 세션에있는 no를 넣어줌.
 		userVo.setNo(authVo.getNo());
 		//System.out.println("세션no 넣은 후: " + userVo.toString());
 		
-		userDao.update(userVo);
+		//회원정보 수정
+		//userDao.update(userVo);
+		userService.modify(userVo);
+		
 		//수정된 이름을 다시 session에 넣어줌.
 		authVo.setName(userVo.getName());
 		
