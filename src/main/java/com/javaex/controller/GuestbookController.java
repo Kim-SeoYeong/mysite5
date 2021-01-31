@@ -57,6 +57,7 @@ public class GuestbookController {
 		
 		int count = guestbookService.guestDelete(guestVo);
 		
+		//이부분은 컨트롤러말고 서비스쪽에서 처리해줘야함. 
 		if(count == 1) {
 			return "redirect:/guestbook/list";
 		} else {
