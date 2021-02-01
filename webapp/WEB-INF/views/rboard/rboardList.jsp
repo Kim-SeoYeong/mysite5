@@ -50,23 +50,37 @@
 							<tr>
 								<th>번호</th>
 								<th>제목</th>
-								<th>글쓴이</th>
+								<th>작성자</th>
 								<th>조회수</th>
 								<th>작성일</th>
+								<th>group_no</th>
+								<th>order_no</th>
+								<th>depth</th>
 								<th>관리</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${requestScope.bList}" var="boardList">
+							<c:forEach items="${requestScope.rbList}" var="rboardList">
 								<tr>
-									<td>${boardList.no}</td>
-									<td class="text-left"><a href="${pageContext.request.contextPath}/board/read?no=${boardList.no}">${boardList.title}</a></td>
-									<td>${boardList.name}</td>
-									<td>${boardList.hit}</td>
-									<td>${boardList.regDate}</td>
+									<td>${rboardList.no}</td>
+									<td class="text-left">
+										<a href="${pageContext.request.contextPath}/rboard/read?no=${rboardList.no}">
+											<c:forEach var="item" begin="1" end="${rboardList.depth}" step="1">
+												<!-- &nbsp; 공백표시를 해줌. -->
+												&nbsp;&nbsp;&nbsp;
+											</c:forEach>
+											${rboardList.title}
+										</a>
+									</td>
+									<td>${rboardList.name}</td>
+									<td>${rboardList.hit}</td>
+									<td>${rboardList.regDate}</td>
+									<td>${rboardList.groupNo}</td>
+									<td>${rboardList.orderNo}</td>
+									<td>${rboardList.depth}</td>
 									<td>
-										<c:if test="${authUser.no eq boardList.userNo}">
-											<a href="${pageContext.request.contextPath}/board/delete?no=${boardList.no}">[삭제]</a>
+										<c:if test="${authUser.no eq rboardList.userNo}">
+											<a href="">[삭제]</a>
 										</c:if>
 									</td>
 								</tr>
@@ -94,7 +108,7 @@
 						<div class="clear"></div>
 					</div>
 					<c:if test="${authUser.no != null}">
-						<a id="btn_write" href="${pageContext.request.contextPath}/board/writeForm">글쓰기</a>
+						<a id="btn_write" href="${pageContext.request.contextPath}/rboard/writeForm">글쓰기</a>
 					</c:if>
 				</div>
 				<!-- //list -->
