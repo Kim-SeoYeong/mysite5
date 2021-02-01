@@ -29,20 +29,27 @@ public class BoardService {
 		return boardList;
 	}
 	
+	//게시글 읽기 (조회수 처리까지 한번에 해주자)
+	public BoardVo boardRead(int no) {
+		System.out.println("BaordService boardRead()");
+		boardDao.hitUpdate(no);
+		
+		return boardDao.boardSelectOne(no);
+	}
+	/*
 	//조회수 업데이트
 	public void hitUpdate(int no) {
 		System.out.println("BaordService hitUpdate()");
 		
 		boardDao.hitUpdate(no);
 	}
-	
-	//게시글 읽기 폼
+	*/
+	//게시글 수정 폼
 	public BoardVo boardSelectOne(int no) {
 		System.out.println("BoardService boardSelectOne()");
 		
 		return boardDao.boardSelectOne(no);
 	}
-	
 	//게시 수정
 	public void boardUpdate(BoardVo boardVO) {
 		System.out.println("BoardService boardUpdate()");

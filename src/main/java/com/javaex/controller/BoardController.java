@@ -40,9 +40,10 @@ public class BoardController {
 		System.out.println("/board/read");
 		
 		//조회수 업데이트
-		boardService.hitUpdate(no);
+		//boardService.hitUpdate(no);
 		
-		BoardVo boardVo = boardService.boardSelectOne(no);
+		//BoardVo boardVo = boardService.boardSelectOne(no);
+		BoardVo boardVo = boardService.boardRead(no);
 		System.out.println(boardVo.toString());
 		
 		//boardVo를 model에 담아서 넘김.
