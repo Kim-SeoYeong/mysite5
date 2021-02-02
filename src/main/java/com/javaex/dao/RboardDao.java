@@ -61,4 +61,11 @@ public class RboardDao {
 		
 		sqlSession.update("rboard.rboardUpdate", rboardVo);
 	}
+	
+	//게시글 수정
+	public void rboardUpdateFlag(int no) {
+		System.out.println("RboardDao rboardUpdateFlag()");
+		
+		sqlSession.update("rboard.updateFlag", no);
+	}
 }

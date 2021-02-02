@@ -98,4 +98,14 @@ public class RboardController {
 		
 		return "redirect:/rboard/list";
 	}
+	
+	//댓글게시판 삭제
+	@RequestMapping(value="/delete", method={RequestMethod.GET, RequestMethod.POST})
+	public String rboardDelete(@RequestParam("no") int no) {
+		System.out.println("/rboard/delete");
+		
+		rBoardService.rboardDelete(no);
+		
+		return "redirect:/rboard/list";
+	}
 }

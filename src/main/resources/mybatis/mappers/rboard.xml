@@ -14,7 +14,8 @@
 			        rboard.reg_date as regDate,
 			        rboard.group_no as groupNo,
 			        rboard.order_no as orderNo,
-			        rboard.depth
+			        rboard.depth,
+			        rboard.flag
 			from rboard, users
 			where rboard.user_no = users.no
 			order by group_no DESC, order_no ASC
@@ -42,7 +43,8 @@
 			        rboard.reg_date as regDate,
 			        rboard.group_no as groupNo,
 			        rboard.order_no as orderNo,
-			        rboard.depth
+			        rboard.depth,
+			        rboard.flag
 			from rboard, users
 			where rboard.user_no = users.no
 			and rboard.no = #{no}	
@@ -61,7 +63,8 @@
 					sysdate, 
 					seq_rboard_no.currval,
 					1, 
-					0)
+					0,
+					default)
 		]]>
 	</insert>
 	
@@ -77,7 +80,8 @@
 			sysdate,
 			#{groupNo},
 			#{orderNo},
-			#{depth})
+			#{depth},
+			default)
 		]]>
 	</insert>
 	
@@ -101,4 +105,13 @@
 		]]>
 	</update>
 	
+	<!-- 게시물 삭제 (실제론 업데이트)-->
+	<update id="updateFlag" parameterType="int">
+		<![CDATA[
+			update rboard
+			set flag = 1
+			where no = #{no}
+		]]>
+	</update>
+
 </mapper>

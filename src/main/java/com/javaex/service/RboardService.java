@@ -1,6 +1,8 @@
 package com.javaex.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +65,18 @@ public class RboardService {
 		System.out.println("RboardService rboardUpdate()");
 		
 		rboardDao.rboardUpdate(rBoardVo);
+	}
+	
+	//게시글 삭제
+	public void rboardDelete(int no) {
+		System.out.println("RboardService rboardDelete()");
+
+		//System.out.println(rBoardVo.getGroupNo());
+		//System.out.println(rBoardVo.getOrderNo());
+		//System.out.println(rBoardVo.getDepth());
+		
+		//버튼은 삭제를 누르겠지만 실제론 flag값만 업데이트 쳐주기위해
+		rboardDao.rboardUpdateFlag(no);	
+		
 	}
 }

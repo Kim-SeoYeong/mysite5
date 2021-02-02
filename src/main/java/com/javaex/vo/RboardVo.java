@@ -12,12 +12,13 @@ public class RboardVo {
 	private int groupNo; // 그룹번호(부모번호)
 	private int orderNo; // 그룹내 글 순서
 	private int depth; // 깊이
+	private int flag;	//삭제처리를 위한 플래그
 
 	//생성자
 	public RboardVo() {}
 
 	public RboardVo(int no, int userNo, String title, String name, String content, int hit, String regDate, int groupNo,
-			int orderNo, int depth) {
+			int orderNo, int depth, int flag) {
 		this.no = no;
 		this.userNo = userNo;
 		this.title = title;
@@ -28,10 +29,11 @@ public class RboardVo {
 		this.groupNo = groupNo;
 		this.orderNo = orderNo;
 		this.depth = depth;
+		this.flag = flag;
 	}
 
-	//메소드-g/s
 
+	//메소드-g/s
 	public int getNo() {
 		return no;
 	}
@@ -111,15 +113,21 @@ public class RboardVo {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-	
 
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
 	//일반메소드
-	
+
 	@Override
 	public String toString() {
 		return "RboardVo [no=" + no + ", userNo=" + userNo + ", title=" + title + ", name=" + name + ", content="
 				+ content + ", hit=" + hit + ", regDate=" + regDate + ", groupNo=" + groupNo + ", orderNo=" + orderNo
-				+ ", depth=" + depth + "]";
+				+ ", depth=" + depth + ", flag=" + flag + "]";
 	}
 	
 }
