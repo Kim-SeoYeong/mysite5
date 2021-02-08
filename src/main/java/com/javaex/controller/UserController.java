@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaex.dao.UserDao;
 import com.javaex.service.UserService;
@@ -135,4 +137,26 @@ public class UserController {
 		
 		return "redirect:/";
 	}
+	
+	//회원가입 - 아이디 중복체크
+	//응답의 body에다가 return의 값을 받아라.
+	@ResponseBody	//return할때 값을 원래처럼 해석하지말고 response에 can이나 cant같은 데이터만 보내라 
+	@RequestMapping(value="/idcheck", method={RequestMethod.GET, RequestMethod.POST})
+	public String idCheck(@RequestParam("id") String id, @RequestParam("password") String password) {
+		//패스워드는 원래 필요없는데 테스트를 위해 추가해준 것 뿐.
+		
+		System.out.println("/user/idcheck");
+		System.out.println("checkid = " + id);
+		System.out.println("password= " + password);
+		
+		//String result = userService.idCheck(id);
+		//System.out.println(result);
+	
+		//return "redirect:/user/joinForm?result=" + result;
+		//return "result";	//jsp를 찾는 문법
+		//WEB-INF/views/result.jsp
+		return ""; 	//data만 보내려고한다.	@ResponseBody ==> resopnse의 body 영역에다가 data만 보낸다.(return 값이 data)
+
+	}
+	
 }

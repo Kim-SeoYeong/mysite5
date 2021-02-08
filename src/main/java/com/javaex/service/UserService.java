@@ -35,4 +35,22 @@ public class UserService {
 		System.out.println("userService modify()");
 		userDao.update(userVo);
 	}
+	
+	//회원가입 - 아이디 중복체크
+	public String idCheck(String id) {
+		System.out.println("userService idcheck() => " + id);
+		UserVo userVo = userDao.selectOne(id);
+		
+		String result = "";
+		
+		if(userVo == null) {
+			//사용할 수 있는 id
+			result = "can";
+		} else {
+			//사용할 수 없는 id
+			result = "cant";
+		}
+		
+		return result;
+	}
 }

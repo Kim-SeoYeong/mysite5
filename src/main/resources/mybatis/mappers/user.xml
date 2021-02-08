@@ -50,4 +50,17 @@
 		]]>
 	</update>
 	
+	<!-- 회원정보 아이디중복체크를 위해 회원정보 id로 가져오기 -->
+	<select id="selectById" parameterType="String" resultType="com.javaex.vo.UserVo">
+		<![CDATA[
+			select  no,
+					id,
+					password,
+					name,
+					gender
+			from users
+			where id = #{id}
+		]]>
+	</select>
+	
 </mapper>
