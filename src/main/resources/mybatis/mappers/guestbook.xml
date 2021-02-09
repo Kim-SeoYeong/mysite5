@@ -38,4 +38,40 @@
 		]]>
 	</delete>
 	
+	<!-- 글저장 -->
+	<!-- no <== seq_guestboo_no.nextval -->
+	<insert id="insertSelectKey" parameterType="com.javaex.vo.GuestVo">
+		<!-- keyProperty => 어디에 저장할 것인지 -->
+		<!-- order => selectKey를 먼저 실행하고 CDATA를 하려면 Beform을 적어줌. -->
+		<!-- resultType을 어디에 저장할거야? no에 저장할거야 -->
+		
+		<!-- insert문의 parameterType이 GuestVo이기때문에 keyProperty에 no는 setNo랑 같은 의미라서 GuestVo 필드명이랑 똑같이해줘야함. -->
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">	
+			select seq_guestbook_id.nextval from dual
+		</selectKey>
+		
+		<![CDATA[
+			insert into guestbook
+			values (#{no}, 
+					#{name}, 
+					#{password}, 
+					#{content}, 
+					sysdate
+			)
+		]]>
+	</insert>
+	
+	<!-- 글 1개 가져오기 -->
+	<select id="select" parameterType="int" resultType="com.javaex.vo.GuestVo">
+		<![CDATA[
+			select  no,
+			        name,
+			        content,
+			        reg_date regDate
+			from guestbook
+			where no = #{no}
+		]]>
+	</select>
+
+	
 </mapper>

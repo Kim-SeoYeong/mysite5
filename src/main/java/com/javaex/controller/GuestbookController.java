@@ -66,4 +66,11 @@ public class GuestbookController {
 		}
 
 	}
+	
+	//ajax List
+	@RequestMapping(value="/ajaxList", method={RequestMethod.GET, RequestMethod.POST})
+	public String ajaxList() {
+		System.out.println("guestbookController/ajaxList");
+		return "/guestbook/ajaxList";
+	}
 }
