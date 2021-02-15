@@ -39,74 +39,37 @@
 
 			<div id="board">
 				<div id="list">
-					<form action="" method="">
+					<form action="${pageContext.request.contextPath}/board/list2" method="get">
 						<div class="form-group text-right">
-							<input type="text">
-							<button type="submit" id=btn_search>검색</button>
+							<input type="text" name="keyword">
+							<button type="submit" id="btn_search">검색</button>
 						</div>
 					</form>
-					<table >
+					<table>
 						<thead>
 							<tr>
 								<th>번호</th>
 								<th>제목</th>
-								<th>작성자</th>
+								<th>글쓴이</th>
 								<th>조회수</th>
 								<th>작성일</th>
-								<th>group_no</th>
-								<th>order_no</th>
-								<th>depth</th>
-								<th>플래그</th>
 								<th>관리</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${requestScope.rbList}" var="rboardList">
-								<c:choose>
-									<c:when test="${rboardList.flag == 1}">
-										<tr>
-											<td>${rboardList.no}</td>
-											<td class="text-left">
-												<c:forEach var="item" begin="1"	end="${rboardList.depth}" step="1">
-													<!-- &nbsp; 공백표시를 해줌. -->
-													&nbsp;&nbsp;&nbsp;
-												</c:forEach>삭제된 댓글입니다.
-											</td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td>${rboardList.groupNo}</td>
-											<td>${rboardList.orderNo}</td>
-											<td>${rboardList.depth}</td>
-											<td>${rboardList.flag}</td>
-											<td></td>
-										</tr>
-									</c:when>
-									<c:otherwise>
-										<tr>
-											<td>${rboardList.no}</td>
-											<td class="text-left">
-												<a href="${pageContext.request.contextPath}/rboard/read?no=${rboardList.no}"> 
-													<c:forEach var="item" begin="1"	end="${rboardList.depth}" step="1">
-														<!-- &nbsp; 공백표시를 해줌. -->
-														&nbsp;&nbsp;&nbsp;
-													</c:forEach> ${rboardList.title}
-												</a>
-											</td>
-											<td>${rboardList.name}</td>
-											<td>${rboardList.hit}</td>
-											<td>${rboardList.regDate}</td>
-											<td>${rboardList.groupNo}</td>
-											<td>${rboardList.orderNo}</td>
-											<td>${rboardList.depth}</td>
-											<td>${rboardList.flag}</td>
-											<td><c:if test="${authUser.no eq rboardList.userNo}">
-													<a href="${pageContext.request.contextPath}/rboard/delete?no=${rboardList.no}">[삭제]</a>
-												</c:if>
-											</td>
-										</tr>
-									</c:otherwise>
-								</c:choose>
+							<c:forEach items="${requestScope.bList}" var="boardList">
+								<tr>
+									<td>${boardList.no}</td>
+									<td class="text-left"><a href="${pageContext.request.contextPath}/board/read?no=${boardList.no}">${boardList.title}</a></td>
+									<td>${boardList.name}</td>
+									<td>${boardList.hit}</td>
+									<td>${boardList.regDate}</td>
+									<td>
+										<c:if test="${authUser.no eq boardList.userNo}">
+											<a href="${pageContext.request.contextPath}/board/delete?no=${boardList.no}">[삭제]</a>
+										</c:if>
+									</td>
+								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -131,7 +94,7 @@
 						<div class="clear"></div>
 					</div>
 					<c:if test="${authUser.no != null}">
-						<a id="btn_write" href="${pageContext.request.contextPath}/rboard/writeForm">글쓰기</a>
+						<a id="btn_write" href="${pageContext.request.contextPath}/board/writeForm">글쓰기</a>
 					</c:if>
 				</div>
 				<!-- //list -->

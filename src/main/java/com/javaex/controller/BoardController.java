@@ -1,8 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +31,35 @@ public class BoardController {
 		model.addAttribute("bList", boardList);
 		
 		return "/board/list";
+	}
+	
+	//게시판 리스트 폼(리스트 + 검색기능 추가)
+	@RequestMapping(value="/list2", method= {RequestMethod.GET, RequestMethod.POST})
+	public String list2(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword, Model model) {	//keyword의 값이 없으면 ""으로 주고 있으면 keyword 값으로 넘겨줘
+		System.out.println("[BoardController.list2()]");
+		//System.out.println("keword = " + keyword);
+		
+		List<BoardVo> boardList = boardService.getBoardList2(keyword);
+		model.addAttribute("bList", boardList);
+		
+		return "board/list2";
+	}
+	
+	//게시판 리스트폼(리스트 + 검색 + 페이징 기능 추가)
+	@RequestMapping(value="/list3", method= {RequestMethod.GET, RequestMethod.POST})
+	public String list3(@RequestParam(value = "keyword", required = false, defaultValue="") String keyword, 
+						@RequestParam(value = "crtPage", required = false, defaultValue="1") int crtPage,
+						Model model) {
+		System.out.println("[BoardController.list3()]");
+		//System.out.println("keyword = " + keyword);
+		//System.out.println("crtPage = " + crtPage);
+		
+		Map<String, Object> pMap = boardService.getBoardList3(keyword, crtPage);
+		System.out.println(pMap);
+		
+		model.addAttribute("pMap", pMap);
+		
+		return "board/list3";
 	}
 	
 	//게시글 읽기

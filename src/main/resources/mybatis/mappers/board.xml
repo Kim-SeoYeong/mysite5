@@ -14,8 +14,78 @@
 			        board.user_no as userNo
 			from users, board
 			where users.no = board.user_no
-			order by reg_date desc
+			order by board.no desc
 		]]>
+	</select>
+	
+	<!-- 글전체가져오기(키워드포함) -->
+	<select id="selectList2" parameterType="string" resultType="com.javaex.vo.BoardVo">
+		<![CDATA[
+			select  b.no,
+			        b.title,
+			        u.name,
+			        b.content,
+			        b.hit,
+			        b.reg_date as regDate,
+			        b.user_no as userNo
+			from board b, users u
+			where u.no = b.user_no
+		]]>
+		<if test="value != null and value != '' ">
+			and b.title like '%' || #{keyword} || '%'
+		</if>
+		<![CDATA[
+			order by b.no desc
+		]]>
+	</select>
+	
+	<!-- 글전체가져오기(키워드포함 + 페이징) -->
+	<select id="selectList3" parameterType="map" resultType="com.javaex.vo.BoardVo">
+		<![CDATA[
+			select  r.rnum,
+			        r.no,
+			        r.title,
+			        r.hit,
+			        r.regDate,
+			        r.userNo,
+			        r.userName
+			from (select    rownum rnum,
+			                o.no,
+			                o.title,
+			                o.hit,
+			                o.regDate,
+			                o.userNo,
+			                o.userName
+			      from (select    board.no,
+			                      board.title,
+			                      users.name as userName,
+			                      board.content,
+			                      board.hit,
+			                      to_char(board.reg_date, 'YYYY-MM-DD hh24:mi:ss') as regDate,
+			                      board.user_no as userNo
+			            from users, board
+			            where users.no = board.user_no
+		]]>
+					<if test = " keyword != null and keyword != '' ">
+			            and board.title like '%' || #{keyword} || '%'
+			        </if>
+		<![CDATA[	            
+			            order by board.no desc) o ) r
+			where r.rnum >= #{startRNum}
+			and r.rnum <= #{endRNum}
+		]]>
+	</select>
+	
+	<!-- 전체 글 갯수 가져오기 -->
+	<select id = "selectTotalCnt" parameterType="string" resultType="int">
+		<![CDATA[
+			select count(*)
+			from board b, users u
+			where b.user_no = u.no
+		]]>
+		<if test = " value != null and value != '' ">
+			and b.title like '%' || #{keyword} || '%'
+		</if>
 	</select>
 	
 	<!-- 게시판 글 조회 -->
