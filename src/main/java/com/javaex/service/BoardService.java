@@ -169,11 +169,17 @@ public class BoardService {
 		System.out.println("BoardService boardInsert()");
 		UserVo userVo = (UserVo)session.getAttribute("authUser");
 		
+		//임의로 1234개 글을 넣기위해
+		/*
 		for(int i=1; i<=1234; i++) {
 			boardVo.setTitle(i + " 번째 글입니다.");
 			boardVo.setContent(i + "번째 글 내용입니다.");
 			boardVo.setUserNo(userVo.getNo());
 			boardDao.boardInsert(boardVo);
 		}
+		*/
+		
+		boardVo.setUserNo(userVo.getNo());
+		boardDao.boardInsert(boardVo);
 	}
 }
