@@ -29,17 +29,17 @@ public class GalleryService {
 	private HttpSession session;
 	
 	//갤러리 리스트
-	public List<GalleryVo> galleryList() {
-		System.out.println("[GalleryService.galleryList()]");
+	public List<GalleryVo> galleryList2() {
+		System.out.println("[GalleryService.galleryList2()]");
 		
-		List<GalleryVo> galList = galleryDao.gallerySelectList();
+		List<GalleryVo> galList = galleryDao.gallerySelectList2();
 		//System.out.println(galList);
 		
 		return galList;
 	}
 	
-	public Map<String, Object> galleryList2(int crtPage) {
-		System.out.println("[GalleryService.galleryList2()]");
+	public Map<String, Object> galleryList(int crtPage) {
+		System.out.println("[GalleryService.galleryList()]");
 		
 		//페이징
 		
@@ -57,7 +57,7 @@ public class GalleryService {
 		//1page(1,12)	2page(13,24)	3page(25,36)
 		int endRNum = (startRNum + listCnt) - 1;
 		
-		List<GalleryVo> galleryList = galleryDao.gallerySelectList2(startRNum, endRNum);
+		List<GalleryVo> galleryList = galleryDao.gallerySelectList(startRNum, endRNum);
 		
 		//System.out.println(galleryList);
 		

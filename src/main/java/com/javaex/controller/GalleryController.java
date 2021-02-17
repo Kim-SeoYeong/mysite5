@@ -24,11 +24,11 @@ public class GalleryController {
 	private GalleryService galleryService;
 	
 	//갤러리 리스트 폼
-	@RequestMapping(value="/list", method= {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="/list2", method= {RequestMethod.GET, RequestMethod.POST})
 	public String list(Model model) {
-		System.out.println("[GalleryController.list()]");
+		System.out.println("[GalleryController.list2()]");
 		
-		List<GalleryVo> galList = galleryService.galleryList();
+		List<GalleryVo> galList = galleryService.galleryList2();
 		//System.out.println(galList);
 		model.addAttribute("galList", galList);
 		
@@ -36,17 +36,17 @@ public class GalleryController {
 	}
 	
 	//갤러리 리스트 폼(페이징 추가)
-	@RequestMapping(value="/list2", method= {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="/list", method= {RequestMethod.GET, RequestMethod.POST})
 	public String list2(@RequestParam(value = "crtPage", required = false, defaultValue="1") int crtPage, 
 						Model model) {
-		System.out.println("[GalleryController.list2()]");
+		System.out.println("[GalleryController.list()]");
 		
-		Map<String, Object> gMap = galleryService.galleryList2(crtPage);
+		Map<String, Object> gMap = galleryService.galleryList(crtPage);
 		//System.out.println(gMap);
 		
 		model.addAttribute("gMap", gMap);
 		
-		return "/gallery/list2";
+		return "/gallery/list";
 	}
 	
 	//갤러리 이미지 등록

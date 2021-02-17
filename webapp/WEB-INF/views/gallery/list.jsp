@@ -54,8 +54,9 @@
 
 					<ul id="viewArea">
 						<!-- 이미지반복영역 -->
-						<c:forEach items="${galList}" var="galleryList">
-							<li id="galLi" data-no="${galleryList.no}" data-chkdelete="${galleryList.userNo == authUser.no}" data-userno="${galleryList.userNo}">
+						<c:forEach items="${gMap.galleryList}" var="galleryList">
+							<li id="g-${galleryList.no}" data-no="${galleryList.no}" data-chkdelete="${galleryList.userNo == authUser.no}"
+								data-userno="${galleryList.userNo}">
 								<!-- li태그를 클릭했을때 no값을 가져오게 하고싶어서 data-no를 이용..data 어렵다ㅠ 엄청 헤맴 ㅠㅠ--> <!-- data-어쩌고 ==> 여기 어쩌고부분에 대문자가 들어가면 인식이안됨.. 이유는 모르겠음 ㅠㅠ  -->
 								<div class="view">
 									<img class="imgItem" src="${pageContext.request.contextPath}/upload/${galleryList.saveName}">
@@ -67,6 +68,24 @@
 						</c:forEach>
 						<!-- 이미지반복영역 -->
 					</ul>
+					<div class="clear"></div>
+					<div id="paging">
+						<ul>
+							<c:if test="${gMap.prev == true}">
+								<li><a href="${pageContext.request.contextPath}/gallery/list?crtPage=${gMap.startPageBtnNo-1}">◀</a></li>
+							</c:if>
+
+							<c:forEach begin="${gMap.startPageBtnNo}" end="${gMap.endPageBtnNo}" step="1" var="page">
+								<li><a href="${pageContext.request.contextPath}/gallery/list?crtPage=${page}">${page}</a></li>
+							</c:forEach>
+
+							<c:if test="${gMap.next == true}">
+								<li><a href="${pageContext.request.contextPath}/gallery/list?crtPage=${gMap.endPageBtnNo+1}">▶</a></li>
+							</c:if>
+						</ul>
+
+					</div>
+					<!-- paging -->
 				</div>
 				<!-- //list -->
 			</div>
@@ -144,7 +163,7 @@
 
 				</div>
 
-				<div class="modal-footer"></div>
+				<div class="modal-footer" id="viewModalDel"></div>
 
 			</div>
 			<!-- /.modal-content -->
@@ -168,104 +187,96 @@
 		//모달창 띄우기
 		$("#addModal").modal();
 	});
+	/*
+	 //모달창에서 등록버튼 클릭시
+	 $("#btnUpload").on("click", function() {
+	 console.log("모달창 닫기");
 
-	//모달창에서 등록버튼 클릭시
-	$("#btnUpload").on("click", function() {
-		console.log("모달창 닫기");
-
-		//모달창 닫기
-		$("#addModal").modal("hide");
-	});
-
+	 //모달창 닫기
+	 $("#addModal").modal("hide");
+	 });
+	 */
 	//이미지화면 클릭시 
-	$("#viewArea")
-			.on(
-					"click",
-					"li",
-					function() {
-						console.log("이미지 클릭");
+	$("#viewArea").on("click","li", function() {
+		console.log("이미지 클릭");
 
-						//no값 data-no을 이용해서 가져오기.
-						var no = $(this).data("no");
-						//console.log(no);
+		//no값 data-no을 이용해서 가져오기.
+		var no = $(this).data("no");
+		//console.log(no);
 
-						//이미지 출력을 ajax로 이용
-						$
-								.ajax({
+		//이미지 출력을 ajax로 이용
+		$.ajax({
 
-									url : "${pageContext.request.contextPath}/gallery/read",
-									type : "post",
-									//contentType : "application/json",
-									data : {
-										no : no
-									},
+			url : "${pageContext.request.contextPath}/gallery/read",
+			type : "post",
+			//contentType : "application/json",
+			data : {
+				no : no
+			},
+	
+			dataType : "json",
+			success : function(galleryVo) {
+				/*성공시 처리해야될 코드 작성*/
+				//잘넘어오는지 확인해보자!
+				//console.log(galleryVo.no);
+				//console.log(galleryVo.name);
+				//console.log(galleryVo.saveName);
+				//이미지 보기 팝업창 img 경로에 가져온 데이터로 넣어주기
+				$("#viewModelImg").attr(
+						"src",
+						"${pageContext.request.contextPath}/upload/"
+								+ galleryVo.saveName);
+	
+				//모달창에 content 넣어주기
+				$("#viewModelContent").html(
+						galleryVo.content);
+	
+				//no값 넣어주기
+				$("#modalNo").attr("value",
+						galleryVo.no);
+	
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
 
-									dataType : "json",
-									success : function(galleryVo) {
-										/*성공시 처리해야될 코드 작성*/
-										//잘넘어오는지 확인해보자!
-										//console.log(galleryVo.no);
-										//console.log(galleryVo.name);
-										//console.log(galleryVo.saveName);
-										//이미지 보기 팝업창 img 경로에 가져온 데이터로 넣어주기
-										$("#viewModelImg").attr(
-												"src",
-												"${pageContext.request.contextPath}/upload/"
-														+ galleryVo.saveName);
+		//첫번쨰 방법은 userno값만 가져와서 비교하는 방법
+		var userNo = $(this).data("userno");
+		//console.log("userNo : " + userNo);
 
-										//모달창에 content 넣어주기
-										$("#viewModelContent").html(
-												galleryVo.content);
+		var authUser = "${authUser.no}";
+		//console.log("authUser : " + authUser);
 
-										//no값 넣어주기
-										$("#modalNo").attr("value",
-												galleryVo.no);
+		if (userNo == authUser) {
+			$("#viewModalDel").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>"
+									+ "<button type='button' class='btn btn-danger' id='btnDel'>삭제</button>");
+		} else {
+			$("#viewModalDel").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>");
+		}
 
-									},
-									error : function(XHR, status, error) {
-										console.error(status + " : " + error);
-									}
-								});
+		//2번쨰 방법은 아예 data에서부터 비교해서 가져오는 방법
+		/*
+		var chkdelete = $(this).data("chkdelete");
+		//console.log(chkdelete);
+		
+		if (chkdelete == true) {
+			$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>" + 
+								    "<button type='button' class='btn btn-danger' id='btnDel'>삭제</button>");
+		} else {
+			$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>");
+		}
+		 */
 
-						//첫번쨰 방법은 userno값만 가져와서 비교하는 방법
-						var userNo = $(this).data("userno");
-						//console.log("userNo : " + userNo);
-
-						var authUser = "${authUser.no}";
-						//console.log("authUser : " + authUser);
-
-						if (userNo == authUser) {
-							$(".modal-footer")
-									.html(
-											"<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>"
-													+ "<button type='button' class='btn btn-danger' id='btnDel'>삭제</button>");
-						} else {
-							$(".modal-footer")
-									.html(
-											"<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>");
-						}
-
-						//2번쨰 방법은 아예 data에서부터 비교해서 가져오는 방법
-						/*
-						var chkdelete = $(this).data("chkdelete");
-						//console.log(chkdelete);
-						
-						if (chkdelete == true) {
-							$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>" + 
-												    "<button type='button' class='btn btn-danger' id='btnDel'>삭제</button>");
-						} else {
-							$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>");
-						}
-						 */
-
-						//이미지보기 팝업 모달창 띄우기
-						$("#viewModal").modal();
-					});
+		//이미지보기 팝업 모달창 띄우기
+		$("#viewModal").modal();
+	});
 
 	//이미지 삭제 버튼 클릭시
 	$(".modal-footer").on("click", "#btnDel", function() {
 		console.log("삭제버튼 클릭!");
 
+		event.preventDefault();
 		var no = $("#modalNo").val();
 		//console.log(no);
 
@@ -282,13 +293,13 @@
 			dataType : "json",
 			success : function(count) {
 				/*성공시 처리해야될 코드 작성*/
-				if (count == 1) {
-					//모달창 닫기
-					$("#viewModal").hide();
+				//모달창 닫기
+				$("#viewModal").hide();
 
-					//갤러리 리스트에서 삭제해주자
-					$("#galLi").remove();
-				}
+				console.log(no);
+				//갤러리 리스트에서 삭제해주자
+				$("#g-" + no).remove();
+
 			},
 			error : function(XHR, status, error) {
 				console.error(status + " : " + error);

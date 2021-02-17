@@ -16,15 +16,15 @@ public class GalleryDao {
 	private SqlSession sqlSession;
 	
 	//갤러리 리스트
-	public List<GalleryVo> gallerySelectList() {
-		System.out.println("[GalleryDao.gallerySelectList()]");
+	public List<GalleryVo> gallerySelectList2() {
+		System.out.println("[GalleryDao.gallerySelectList2()]");
 
 		return sqlSession.selectList("gallery.galleryList");
 	}
 	
 	//갤러리 리스트(페이징 추가)
-	public List<GalleryVo> gallerySelectList2(int startRNum, int endRNum) {
-		System.out.println("[GalleryDao.gallerySelectList2()]");
+	public List<GalleryVo> gallerySelectList(int startRNum, int endRNum) {
+		System.out.println("[GalleryDao.gallerySelectList()]");
 		
 		Map<String, Object> gMap = new HashMap<String, Object>();
 		

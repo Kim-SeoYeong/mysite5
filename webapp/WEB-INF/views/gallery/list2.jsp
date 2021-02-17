@@ -43,7 +43,7 @@
 				<div class="clear"></div>
 			</div>
 			<!-- //content-head -->
-		
+
 
 			<div id="gallery">
 				<div id="list">
@@ -51,10 +51,10 @@
 						<button id="btnImgUpload">이미지올리기</button>
 					</c:if>
 					<div class="clear"></div>
-					
+
 					<ul id="viewArea">
 						<!-- 이미지반복영역 -->
-						<c:forEach items="${gMap.galleryList}" var="galleryList">
+						<c:forEach items="${galList}" var="galleryList">
 							<li id="galLi" data-no="${galleryList.no}" data-chkdelete="${galleryList.userNo == authUser.no}" data-userno="${galleryList.userNo}">
 								<!-- li태그를 클릭했을때 no값을 가져오게 하고싶어서 data-no를 이용..data 어렵다ㅠ 엄청 헤맴 ㅠㅠ--> <!-- data-어쩌고 ==> 여기 어쩌고부분에 대문자가 들어가면 인식이안됨.. 이유는 모르겠음 ㅠㅠ  -->
 								<div class="view">
@@ -67,24 +67,6 @@
 						</c:forEach>
 						<!-- 이미지반복영역 -->
 					</ul>
-					<div class="clear"></div>
-					<div id="paging">
-						<ul>
-							<c:if test="${gMap.prev == true}">
-								<li><a href="${pageContext.request.contextPath}/gallery/list2?crtPage=${gMap.startPageBtnNo-1}">◀</a></li>
-							</c:if>
-	
-							<c:forEach begin="${gMap.startPageBtnNo}" end="${gMap.endPageBtnNo}" step="1" var="page">
-								<li><a href="${pageContext.request.contextPath}/gallery/list2?crtPage=${page}">${page}</a></li>
-							</c:forEach>
-							
-							<c:if test="${gMap.next == true}">
-								<li><a href="${pageContext.request.contextPath}/gallery/list2?crtPage=${gMap.endPageBtnNo+1}">▶</a></li>
-							</c:if>
-						</ul>
-						
-					</div>
-					<!-- paging -->
 				</div>
 				<!-- //list -->
 			</div>
@@ -112,7 +94,7 @@
 					<h4 class="modal-title">이미지등록</h4>
 				</div>
 
-				<form method="post" action="${pageContext.request.contextPath}/gallery/upload2" enctype="multipart/form-data">
+				<form method="post" action="${pageContext.request.contextPath}/gallery/upload" enctype="multipart/form-data">
 					<div class="modal-body">
 						<div class="form-group">
 							<label class="form-text">글작성</label> <input id="addModalContent" type="text" name="content" value="">
@@ -228,7 +210,7 @@
 										//이미지 보기 팝업창 img 경로에 가져온 데이터로 넣어주기
 										$("#viewModelImg").attr(
 												"src",
-												"${pageContext.request.contextPath}/upload2/"
+												"${pageContext.request.contextPath}/upload/"
 														+ galleryVo.saveName);
 
 										//모달창에 content 넣어주기
