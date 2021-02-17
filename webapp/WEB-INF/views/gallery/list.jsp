@@ -55,7 +55,8 @@
 					<ul id="viewArea">
 						<!-- 이미지반복영역 -->
 						<c:forEach items="${galList}" var="galleryList">
-							<li id="galLi" data-no="${galleryList.no}" data-chkdelete="${galleryList.userNo == authUser.no}">
+							<li id="galLi" data-no="${galleryList.no}" data-chkdelete="${galleryList.userNo == authUser.no}"
+										   data-userno="${galleryList.userNo}">
 							<!-- li태그를 클릭했을때 no값을 가져오게 하고싶어서 data-no를 이용..data 어렵다ㅠ 엄청 헤맴 ㅠㅠ-->
 							<!-- data-어쩌고 ==> 여기 어쩌고부분에 대문자가 들어가면 인식이안됨.. 이유는 모르겠음 ㅠㅠ  -->
 								<div class="view" >
@@ -207,7 +208,23 @@
 				console.error(status + " : " + error);
 			}
 		});
+
+		//첫번쨰 방법은 userno값만 가져와서 비교하는 방법
+		var userNo = $(this).data("userno");
+		//console.log("userNo : " + userNo);
+		
+		var authUser = "${authUser.no}";
+		//console.log("authUser : " + authUser);
 	
+		if(userNo == authUser) {
+			$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>" + 
+		    						"<button type='button' class='btn btn-danger' id='btnDel'>삭제</button>");
+		} else {
+			$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>");
+		}
+		
+		//2번쨰 방법은 아예 data에서부터 비교해서 가져오는 방법
+		/*
 		var chkdelete = $(this).data("chkdelete");
 		//console.log(chkdelete);
 		
@@ -217,6 +234,7 @@
 		} else {
 			$(".modal-footer").html("<button type='button' class='btn btn-default' data-dismiss='modal'>닫기</button>");
 		}
+		*/
 		
 		//이미지보기 팝업 모달창 띄우기
 		$("#viewModal").modal();
