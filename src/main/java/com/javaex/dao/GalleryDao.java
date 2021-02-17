@@ -22,6 +22,25 @@ public class GalleryDao {
 		return sqlSession.selectList("gallery.galleryList");
 	}
 	
+	//갤러리 리스트(페이징 추가)
+	public List<GalleryVo> gallerySelectList2(int startRNum, int endRNum) {
+		System.out.println("[GalleryDao.gallerySelectList2()]");
+		
+		Map<String, Object> gMap = new HashMap<String, Object>();
+		
+		gMap.put("startRNum", startRNum);
+		gMap.put("endRNum", endRNum);
+
+		return sqlSession.selectList("gallery.galleryList2", gMap);
+	}
+	
+	//갤러리 리스트 전체갯수 조회
+	public int galleryTotalCount() {
+		System.out.println("[GalleryDao.galleryTotalCount()]");
+		
+		return sqlSession.selectOne("gallery.selectTotal");
+	}
+	
 	//갤러리 이미지 등록
 	public void galleryInsert(GalleryVo galleryVo) {
 		System.out.println("[GalleryDao.galleryInsert()]");

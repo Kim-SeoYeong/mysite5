@@ -1,10 +1,10 @@
 package com.javaex.service;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +36,72 @@ public class GalleryService {
 		//System.out.println(galList);
 		
 		return galList;
+	}
+	
+	public Map<String, Object> galleryList2(int crtPage) {
+		System.out.println("[GalleryService.galleryList2()]");
+		
+		//페이징
+		
+		//페이지당 글 갯수
+		int listCnt = 12;
+		
+		//현재 페이지
+		crtPage = (crtPage > 0) ? crtPage : (crtPage = 1);  //조건 ? 참 : else
+		
+		//시작글 번호 startRNum
+		//1page --> 1 	2Page-->13	 3page --> 25
+		int startRNum = (crtPage-1) * listCnt + 1;
+		
+		//끝글 번호 endRNum
+		//1page(1,12)	2page(13,24)	3page(25,36)
+		int endRNum = (startRNum + listCnt) - 1;
+		
+		List<GalleryVo> galleryList = galleryDao.gallerySelectList2(startRNum, endRNum);
+		
+		//System.out.println(galleryList);
+		
+		//페이징 계산
+		
+		//페이지당 버튼 갯수
+		int pageBtnCount = 10;
+		
+		//전체 글 갯수 구하기
+		int totalcount = galleryDao.galleryTotalCount();
+		//System.out.println(totalcount);
+		
+		//마지막 버튼 번호
+		//10/10.0=1.0 1*10=10	, 11/10.0=1.1 20 
+		int endPageBtnNo = (int)Math.ceil(crtPage/(double)pageBtnCount) * pageBtnCount;
+		
+		//시작 버튼 번호
+		int startPageBtnNo = endPageBtnNo - (pageBtnCount -1);
+		
+		//다음버튼 boolean
+		boolean next;
+		
+		if(endPageBtnNo * listCnt < totalcount) {	//10*12 < 121
+			next = true;
+		} else {	//10*12 < 119
+			next = false;
+		}
+		
+		//이전 버튼 boolean
+		boolean prev;
+		if(startPageBtnNo != 1) {
+			prev = true;
+		} else {
+			prev = false;
+		}
+		
+		Map<String, Object> gMap = new HashMap<String, Object>();
+		gMap.put("galleryList", galleryList);
+		gMap.put("prev", prev);
+		gMap.put("startPageBtnNo", startPageBtnNo);
+		gMap.put("endPageBtnNo", endPageBtnNo);
+		gMap.put("next", next);
+		
+		return gMap;
 	}
 	
 	//갤러리 이미지 등록
@@ -94,6 +160,7 @@ public class GalleryService {
 		
 		galleryDao.galleryInsert(galleryVo);
 	}
+	
 	
 	//갤러리 글 하나만 조회하기
 	public GalleryVo gallerySelectOne(int no) {

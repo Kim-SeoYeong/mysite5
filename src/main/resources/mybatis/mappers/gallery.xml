@@ -19,6 +19,51 @@
 			order by g.no desc
 		]]>
 	</select>
+	
+	<!-- 갤러리 리스트 조회하기(페이징기능 추가) -->
+	<select id="galleryList2" parameterType="map" resultType="com.javaex.vo.GalleryVo">
+		<![CDATA[
+			select  rm.rnum,
+			        rm.no,
+			        rm.userNo,
+			        rm.name,
+			        rm.content,
+			        rm.filePath,
+			        rm.orgName,
+			        rm.saveName,
+			        rm.fileSize 
+			from (  select  rownum rnum,
+			                o.no,
+			                o.userNo,
+			                o.name,
+			                o.content,
+			                o.filePath,
+			                o.orgName,
+			                o.saveName,
+			                o.fileSize
+			        from (select  g.no,
+			                      g.user_no as userNo,
+			                      u.name,
+			                      g.content,
+			                      g.filePath,
+			                      g.orgName,
+			                      g.saveName,
+			                      g.fileSize
+			              from gallery g, users u
+			              where g.user_no = u.no
+			              order by g.no desc) o) rm
+			where rm.rnum >= #{startRNum}
+			and rm.rnum <= #{endRNum}
+		]]>
+	</select>
+	
+	<select id="selectTotal" resultType="int">
+		<![CDATA[
+			select count(*)
+			from gallery g, users u
+			where g.user_no = u.no
+		]]>
+	</select>
 
 	<!-- 갤러리 이미지 등록하기 -->
 	<insert id="galleryInsert" parameterType="com.javaex.vo.GalleryVo">

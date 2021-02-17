@@ -1,6 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,20 @@ public class GalleryController {
 		return "/gallery/list";
 	}
 	
+	//갤러리 리스트 폼(페이징 추가)
+	@RequestMapping(value="/list2", method= {RequestMethod.GET, RequestMethod.POST})
+	public String list2(@RequestParam(value = "crtPage", required = false, defaultValue="1") int crtPage, 
+						Model model) {
+		System.out.println("[GalleryController.list2()]");
+		
+		Map<String, Object> gMap = galleryService.galleryList2(crtPage);
+		//System.out.println(gMap);
+		
+		model.addAttribute("gMap", gMap);
+		
+		return "/gallery/list2";
+	}
+	
 	//갤러리 이미지 등록
 	@RequestMapping(value="/upload", method= {RequestMethod.GET, RequestMethod.POST})
 	public String upload(@ModelAttribute GalleryVo galleryVo, @RequestParam("file") MultipartFile file) {
@@ -42,6 +57,16 @@ public class GalleryController {
 		galleryService.galleryUpload(galleryVo, file);
 		
 		return "redirect:/gallery/list";
+	}
+	
+	//갤러리 이미지 등록
+	@RequestMapping(value="/upload2", method= {RequestMethod.GET, RequestMethod.POST})
+	public String upload2(@ModelAttribute GalleryVo galleryVo, @RequestParam("file") MultipartFile file) {
+		System.out.println("[GalleryController.upload()]");
+		
+		galleryService.galleryUpload(galleryVo, file);
+		
+		return "redirect:/gallery/list2";
 	}
 	
 	//갤러리 이미지 하나 조회
